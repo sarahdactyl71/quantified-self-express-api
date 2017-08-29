@@ -42,6 +42,40 @@ describe('Server', () => {
   })
 
   describe('GET /api/v1/foods/:id', () => {
-    it('should return ')
+    beforeEach( (done) => {
+      database.raw(
+        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['banana', 35]
+      ).then( () => { done() })
+    })
+
+    afterEach( (done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY')
+      .then( () => { done () })
+    })
+
+    it('should return 404 if resource is not found', (done) => {
+      this.request.get('/api/v1/foods/0', (error, response) => {
+        if (error) { done (error) }
+        assert.equal(response.statusCode, 404)
+        done ()
+      })
+    })
+
+    it('should return the id, food, and calories from the resource found', (done) => {
+      const id = 1
+      const foodName = 'banana'
+      const foodCalories = 35
+
+      this.request.get('/api/v1/foods' + id, (error, response) => {
+        if (error) { done (error) }
+
+        let parsedFood = JSON.parse(response.body)
+
+        assert.equal(parsedFood.id, id)
+        assert.equal(parsedFood.name, foodName)
+        assert.equal(parsedFood.calories, foodCalories)
+        done ()
+      })
+    })
   })
 })
