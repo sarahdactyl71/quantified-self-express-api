@@ -2,8 +2,12 @@ const assert = require('chai').assert
 const app = require('../server')
 const request = require('request')
 
+const environment = process.env.NODE_ENV || 'development'
+const configuration = require('../knexfile')[environment]
+const database = require('knex')(configuration)
+
 describe('Server', () => {
-  before(done => {
+  before( (done) => {
     this.port = 9876
     this.server = app.listen(this.port, (err, result) => {
       if (err) { return done(err) }
@@ -45,7 +49,7 @@ describe('Server', () => {
     beforeEach( (done) => {
       database.raw(
         'INSERT INTO foods (name, calories) VALUES (?, ?)', ['banana', 35]
-      ).then( () => { done() })
+      ).then( () => { done () })
     })
 
     afterEach( (done) => {
