@@ -9,8 +9,21 @@ const database = require('knex')(configuration)
 app.set('port', process.env.PORT || 3000)
 app.locals.title = 'Quantified Self Express API'
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
 app.get('/', (request, response) => {
   response.send(app.locals.title)
+})
+
+app.get('/api/foods/:id', (request, response) => {
+  var id = request.params.id
+  database.raw("SELECT * FROM foods WHERE id=?", [id])
+  .then((data) => {
+    if (data.rowCount == 0) { return response.sendStatus(404) }
+
+    response.json(data.rows[0])
+  })
 })
 
 if (!module.parent) {
