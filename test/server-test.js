@@ -2,7 +2,7 @@ const assert = require('chai').assert
 const app = require('../server')
 const request = require('request')
 
-const environment = process.env.NODE_ENV || 'development'
+const environment = process.env.NODE_ENV || 'test'
 const configuration = require('../knexfile')[environment]
 const database = require('knex')(configuration)
 
@@ -10,7 +10,7 @@ describe('Server', () => {
   before( (done) => {
     this.port = 9876
     this.server = app.listen(this.port, (err, result) => {
-      if (err) { return done(err) }
+      if (err) { return done (err) }
       done()
     })
 
@@ -19,7 +19,7 @@ describe('Server', () => {
     })
   })
 
-  after(() => this.server.close())
+  after( () => this.server.close())
 
   it('should exist', () => {
     assert(app)

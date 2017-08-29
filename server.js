@@ -16,8 +16,8 @@ app.get('/', (request, response) => {
   response.send(app.locals.title)
 })
 
-app.get('/api/foods/:id', (request, response) => {
-  var id = request.params.id
+app.get('/api/v1/foods/:id', (request, response) => {
+  const id = request.params.id
   database.raw("SELECT * FROM foods WHERE id=?", [id])
   .then((data) => {
     if (data.rowCount == 0) { return response.sendStatus(404) }
