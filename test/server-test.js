@@ -70,11 +70,10 @@ describe('Server', () => {
       const foodName = 'banana'
       const foodCalories = 35
 
-      this.request.get('/api/v1/foods' + id, (error, response) => {
+      this.request.get('/api/v1/foods/' + id, (error, response) => {
         if (error) { done (error) }
 
         let parsedFood = JSON.parse(response.body)
-
         assert.equal(parsedFood.id, id)
         assert.equal(parsedFood.name, foodName)
         assert.equal(parsedFood.calories, foodCalories)
