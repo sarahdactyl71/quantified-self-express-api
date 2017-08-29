@@ -11,15 +11,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "body-parser": "^1.17.2",
     "chai": "^4.1.1",
-    "express": "^4.15.4",
     "mocha": "^3.5.0",
     "nodemon": "^1.11.0",
     "request": "^2.81.0"
   },
   "dependencies": {
     "knex": "^0.13.0",
-    "pg": "^7.2.0"
+    "pg": "^7.2.0",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4"
   }
 }
