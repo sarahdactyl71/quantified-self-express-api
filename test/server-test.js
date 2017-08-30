@@ -70,10 +70,10 @@ describe('Server', () => {
 
         console.log(parsedFoods)
         assert.equal(parsedFoods.length, 2)
-        assert.equal(firstFood.name, 'Monster Cake')
-        assert.equal(secondFood.name, 'Everything Burrito')
-        assert.equal(firstFood.calories, 1000)
-        assert.equal(secondFood.calories, 300)
+        assert.equal(secondFood.name, 'Monster Cake')
+        assert.equal(firstFood.name, 'Everything Burrito')
+        assert.equal(firstFood.calories, 300)
+        assert.equal(secondFood.calories, 1000)
 
         done ()
       })
