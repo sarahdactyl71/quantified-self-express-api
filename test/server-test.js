@@ -5,6 +5,7 @@ const request = require('request')
 const environment = process.env.NODE_ENV || 'test'
 const configuration = require('../knexfile')[environment]
 const database = require('knex')(configuration)
+const pry = require('pryjs')
 
 describe('Server', () => {
   before( (done) => {
@@ -41,6 +42,40 @@ describe('Server', () => {
         if (error) { done(error) }
         assert(response.body.includes(title), `"${response.body}" does not include "${title}".`)
         done()
+      })
+    })
+  })
+
+  describe("GET /api/v1/foods", () => {
+    beforeEach( (done) => {
+      Promise.all([
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000]),
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Everything Burrito', 300])
+        .then( () =>  done () )
+      ])
+    })
+
+    afterEach( (done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY')
+      .then( () => { done () })
+    })
+
+    it('should return two foods from the resource', (done) => {
+      this.request.get('/api/v1/foods', function(error, response) {
+        if (error) { done(error) }
+
+        const parsedFoods = JSON.parse(response.body)
+        const firstFood = parsedFoods[0]
+        const secondFood = parsedFoods[1]
+
+        console.log(parsedFoods)
+        assert.equal(parsedFoods.length, 2)
+        assert.equal(secondFood.name, 'Monster Cake')
+        assert.equal(firstFood.name, 'Everything Burrito')
+        assert.equal(firstFood.calories, 300)
+        assert.equal(secondFood.calories, 1000)
+
+        done ()
       })
     })
   })
