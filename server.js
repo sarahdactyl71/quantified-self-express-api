@@ -22,13 +22,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/v1/foods/:id', (request, response) => {
-  const id = request.params.id
-  Food.getFood(id)
-  .then((data) => {
-    if (data.rowCount == 0) { return response.sendStatus(404) }
-
-    response.json(data.rows[0])
-  })
+  foodController.showFood(request, response)
 })
 
 if (!module.parent) {
