@@ -58,9 +58,22 @@ describe('Server', () => {
     })
 
     it('should return two foods from the resource', (done) => {
-      
-    })
+      this.request.get('/api/foods', function(error, response) {
+        if (error) { done(error) }
 
+        const parsedFoods = JSON.parse(response.body)
+        const firstFood = parsedFoods[0]
+        const secondFood = parsedFoods[1]
+
+        assert.equal(parsedFoods.length, 2)
+        assert.equal(firstFood.name, 'Monster Cake')
+        assert.equal(secondFood.name, 'Everything Burrito')
+        assert.equal(firstFood.calories, 1000)
+        assert.equal(secondFood.calories, 300)
+
+        done ()
+      })
+    })
   })
 
   describe('GET /api/v1/foods/:id', () => {
