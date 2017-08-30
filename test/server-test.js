@@ -58,7 +58,7 @@ describe('Server', () => {
     })
 
     it('should return two foods from the resource', (done) => {
-      this.request.get('/api/foods', function(error, response) {
+      this.request.get('/api/v1/foods', function(error, response) {
         if (error) { done(error) }
 
         const parsedFoods = JSON.parse(response.body)
