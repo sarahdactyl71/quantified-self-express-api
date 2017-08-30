@@ -134,6 +134,7 @@ describe('Server', () => {
         const parsedFoods = JSON.parse(response.body)
         const firstFood = parsedFoods[0]
 
+        console.log(parsedFoods)
         assert.equal(parsedFoods.length, 1)
         assert.equal(firstFood.name, "Sushi")
         asser.equal(firstFood.calories, 400)
@@ -141,7 +142,6 @@ describe('Server', () => {
         done()
       })
     })
-  })
 
     // it('should send 422 when food name is absent', (done) => {
     //   const food = {
@@ -156,6 +156,10 @@ describe('Server', () => {
     //
     //   })
     // })
+    
+  })
+
+
 
   describe('GET /api/v1/meals', () => {
     beforeEach( (done) => {
