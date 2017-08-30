@@ -49,7 +49,7 @@ describe('Server', () => {
     beforeEach( (done) => {
       database.raw(
         'INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000])
-        .then( () => {'INSERT INTO foods (name, calories) VALUES (?, ?)', ['Everything Burrito', 300]})
+        .then( () => {database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Everything Burrito', 300])})
         .then( () => { done () })
     })
 
