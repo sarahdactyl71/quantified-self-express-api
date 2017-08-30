@@ -48,7 +48,7 @@ describe('Server', () => {
   describe("GET /api/v1/foods", () => {
     beforeEach( (done) => {
       database.raw(
-        'INSERT INTO foods (name, calories) VALUES ('Monster Cake', 1000), ('Meatsiah', 3000), ('Everything Burrito', 300)'
+        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000], ['Meatsiah', 3000], ['Everything Burrito', 300]
       ).then( () => { done () })
     })
 
