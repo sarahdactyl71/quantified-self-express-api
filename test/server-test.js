@@ -129,13 +129,18 @@ describe('Server', () => {
         calories: 400
       }
 
-    this.request.post('/api/v1/foods', { form: food }, (error, response) => {
-      if (error) { done(error) }
+      this.request.post('/api/v1/foods', { form: food }, (error, response) => {
+        if (error) { done(error) }
 
-      const parsedFoods = JSON.parse(response.body)
-      const firstFood = parsedFoods[0]
+        const parsedFoods = JSON.parse(response.body)
+        const firstFood = parsedFoods[0]
 
-    })
+        assert.equal(parsedFoods.length, 1)
+        assert.equal(firstFood.name, "Sushi")
+        asser.equal(firstFood.calories, 400)
+
+        done()
+      })
     })
 
   })
