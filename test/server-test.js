@@ -116,4 +116,21 @@ describe('Server', () => {
       })
     })
   })
+
+  describe('POST' 'api/v1/foods', () => {
+    afterEach( (done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY')
+      .then( () => { done () })
+    })
+
+    it('should take and return data', () => {
+      const food = {
+        name: "Sushi",
+        calories: 400
+      }
+
+      
+    })
+
+  })
 })
