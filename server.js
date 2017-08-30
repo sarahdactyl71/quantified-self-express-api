@@ -6,6 +6,11 @@ const environment = process.env.NODE_ENV || 'development'
 const configuration = require('./knexfile')[environment]
 const database = require('knex')(configuration)
 
+const Food = require('./lib/models/food')
+const Meal= require('./lib/models/meal')
+const foodController = require('./lib/controllers/foods')
+const mealController = require('./lib/controllers/meals')
+
 app.set('port', process.env.PORT || 3000)
 app.locals.title = 'Quantified Self Express API'
 
@@ -17,13 +22,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/v1/foods/:id', (request, response) => {
-  const id = request.params.id
-  database.raw("SELECT * FROM foods WHERE id=?", [id])
-  .then((data) => {
-    if (data.rowCount == 0) { return response.sendStatus(404) }
-
-    response.json(data.rows[0])
-  })
+  foodController.showFood(request, response)
 })
 
 if (!module.parent) {
