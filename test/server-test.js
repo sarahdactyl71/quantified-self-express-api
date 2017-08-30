@@ -48,7 +48,7 @@ describe('Server', () => {
   describe("GET /api/v1/foods", () => {
     beforeEach( (done) => {
       database.raw(
-        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000], ['Meatsiah', 3000], ['Everything Burrito', 300]
+        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000], ['Everything Burrito', 300]
       ).then( () => { done () })
     })
 
@@ -57,12 +57,8 @@ describe('Server', () => {
       .then( () => { done () })
     })
 
-    it('should return 404 if resource is not found', (done) => {
-      this.request.get('/api/v1/foods', (error, response) => {
-        if (error) { done (error) }
-        assert.equal(response.statusCode, 404)
-        done ()
-      })
+    it('should return two foods from the resource', (done) => {
+      
     })
 
   })
