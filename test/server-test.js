@@ -117,7 +117,7 @@ describe('Server', () => {
     })
   })
 
-  describe('POST' 'api/v1/foods', () => {
+  describe('POST' '/api/v1/foods', () => {
     afterEach( (done) => {
       database.raw('TRUNCATE foods RESTART IDENTITY')
       .then( () => { done () })
@@ -129,7 +129,13 @@ describe('Server', () => {
         calories: 400
       }
 
-      
+    this.request.post('/api/v1/foods', { form: food }, (error, response) => {
+      if (error) { done(error) }
+
+      const parsedFoods = JSON.parse(response.body)
+      const firstFood = parsedFoods[0]
+
+    })
     })
 
   })
