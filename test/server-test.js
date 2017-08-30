@@ -49,14 +49,14 @@ describe('Server', () => {
   describe("GET /api/v1/foods", () => {
     beforeEach( (done) => {
       Promise.all([
-        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?, ?)', ['Monster Cake', 1000]),
-        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?, ?)', ['Everything Burrito', 300])
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000]),
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Everything Burrito', 300])
         .then( () =>  done () )
       ])
     })
 
     afterEach( (done) => {
-      database.raw('TRUNCATE foods RESTART IDENTITY')
+      database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
       .then( () => { done () })
     })
 
@@ -87,7 +87,7 @@ describe('Server', () => {
     })
 
     afterEach( (done) => {
-      database.raw('TRUNCATE foods RESTART IDENTITY')
+      database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
       .then( () => { done () })
     })
 
@@ -118,7 +118,7 @@ describe('Server', () => {
 
   describe('POST /api/v1/foods', () => {
     afterEach( (done) => {
-      database.raw('TRUNCATE foods RESTART IDENTITY')
+      database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
       .then( () => { done () })
     })
 
