@@ -17,6 +17,10 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/v1/foods/:id', (request, response) => {
+  database.raw("SELECT * FROM foods")
+})
+
+app.get('/api/v1/foods/:id', (request, response) => {
   const id = request.params.id
   database.raw("SELECT * FROM foods WHERE id=?", [id])
   .then((data) => {

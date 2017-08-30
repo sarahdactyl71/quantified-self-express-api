@@ -45,6 +45,13 @@ describe('Server', () => {
     })
   })
 
+  describe("GET /api/v1/foods", () => {
+    beforeEach( (done) => {
+      database.raw(
+        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000]
+      ).then( () => { done () })
+  })
+
   describe('GET /api/v1/foods/:id', () => {
     beforeEach( (done) => {
       database.raw(
