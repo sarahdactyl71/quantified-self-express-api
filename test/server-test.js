@@ -50,6 +50,13 @@ describe('Server', () => {
       database.raw(
         'INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000]
       ).then( () => { done () })
+    })
+
+    afterEach( (done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY')
+      .then( () => { done () })
+    })
+    
   })
 
   describe('GET /api/v1/foods/:id', () => {
