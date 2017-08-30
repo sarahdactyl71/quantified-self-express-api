@@ -116,4 +116,42 @@ describe('Server', () => {
       })
     })
   })
+
+  describe('GET /api/v1/meals', () => {
+    beforeEach( (done) => {
+      database.raw(
+        'INSERT INTO meals (name) VALUES (?)', ['brunch'],
+        'INSERT INTO meals (name) VALUES (?)', ['supper'],
+        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['bread', 50],
+        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['buns', 85],
+        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['babka', 425],
+        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['roll', 200],
+        'INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [1, 1],
+        'INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [2, 1],
+        'INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [3, 2],
+        'INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [4, 2],
+        'INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [1, 2]
+      ).then( () => { done () })
+    })
+
+    afterEach( (done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
+      database.raw('TRUNCATE meals RESTART IDENTITY CASCADE')
+      database.raw('TRUNCATE meals_foods RESTART IDENTITY CASCADE')
+      .then( () => { done () })
+    })
+
+    it('should rereturn the id, meal name, and foods from the resources found', (done) => {
+      let name = 'brunch'
+      let otherName = 'supper'
+      this.request.get('/api/v1/meals', (error, response) => {
+        if (error) { done (error) }
+
+        let parsedMeals = JSON.parse(response.body)
+        assert.equal(parsedMeals[0].name, name)
+        assert.equal(parsedMeals[1].name, otherName)
+        done ()
+      })
+    })
+  })
 })
