@@ -7,7 +7,7 @@ const configuration = require('./knexfile')[environment]
 const database = require('knex')(configuration)
 
 const Food = require('./lib/models/food')
-const Meal= require('./lib/models/meal')
+const Meal = require('./lib/models/meal')
 const foodController = require('./lib/controllers/foods')
 const mealController = require('./lib/controllers/meals')
 
@@ -43,6 +43,15 @@ app.post('/api/v1/foods', (request, response) => {
     .then( (data) => {
       response.json(data.rows)
     })
+  })
+
+app.get('/api/v1/meals', (request, response) => {
+  Meal.getAllMeals()
+  .then((data) => {
+    if (data.rowCount == 0) { return response.sendStatus(404) }
+
+    response.json(data.rows)
+  })
 })
 
 if (!module.parent) {
