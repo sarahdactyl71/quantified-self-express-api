@@ -57,6 +57,14 @@ describe('Server', () => {
       .then( () => { done () })
     })
 
+    it('should return 404 if resource is not found', (done) => {
+      this.request.get('/api/v1/foods', (error, response) => {
+        if (error) { done (error) }
+        assert.equal(response.statusCode, 404)
+        done ()
+      })
+    })
+
   })
 
   describe('GET /api/v1/foods/:id', () => {
