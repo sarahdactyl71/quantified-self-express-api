@@ -29,6 +29,15 @@ app.get('/api/v1/foods/:id', (request, response) => {
   foodController.showFood(request, response)
 })
 
+app.post('/api/v1/foods', (request, response) => {
+  const name = request.body.name
+  const calories = request.body.calories
+
+  if (!name || !calories) {
+    return response.status(422).send({ error: "Missing required fields"})
+  }
+})
+
 if (!module.parent) {
   app.listen(app.get('port'), () => {
     console.log(`${app.locals.title} is running on ${app.get('port')}.`)

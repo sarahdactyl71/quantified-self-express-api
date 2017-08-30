@@ -123,7 +123,7 @@ describe('Server', () => {
       .then( () => { done () })
     })
 
-    it('should take and return data', () => {
+    it('should take and return data', (done) => {
       const food = {
         name: "Sushi",
         calories: 400
@@ -140,6 +140,20 @@ describe('Server', () => {
         asser.equal(firstFood.calories, 400)
 
         done()
+      })
+    })
+
+    it('should send 422 when food name is absent', (done) => {
+      const food = {
+        name: "",
+        calories: "800"
+      }
+
+      this.request.post('/api/v1/foods', {form: food}, (error, response) => {
+        if (error) { done(error) }
+
+        const parsedFoods = JSON.parse(response.body)
+        
       })
     })
 
