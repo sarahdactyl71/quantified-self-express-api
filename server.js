@@ -19,8 +19,6 @@ app.get('/', (request, response) => {
 app.get('/api/v1/foods', (request, response) => {
   database.raw("SELECT * FROM foods")
   .then((data) => {
-    if (data.rowCount == 0) { return response.sendStatus(404) }
-
     response.json(data.rows[0])
   })
 })
