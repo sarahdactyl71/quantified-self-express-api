@@ -38,8 +38,8 @@ app.post('/api/v1/foods', (request, response) => {
   }
 
   database.raw(
-    'INSERT INTO foods (name, calories) VALUES (?, ?)',
-    [name, calories])
+    'INSERT INTO foods (name, calories, created_at) VALUES (?, ?, ?)',
+    [name, calories, new Date])
     .then( (data) => {
       response.json(data.rows)
     })
