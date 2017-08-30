@@ -22,10 +22,7 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/v1/foods', (request, response) => {
-  database.raw("SELECT * FROM foods")
-  .then((data) => {
-    response.json(data.rows)
-  })
+  foodController.foodIndex(request, response)
 })
 
 app.get('/api/v1/foods/:id', (request, response) => {
