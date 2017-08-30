@@ -19,7 +19,7 @@ app.get('/', (request, response) => {
 app.get('/api/v1/foods', (request, response) => {
   database.raw("SELECT * FROM foods")
   .then((data) => {
-    response.json(data.rows[0])
+    response.json(data.rows)
   })
 })
 
