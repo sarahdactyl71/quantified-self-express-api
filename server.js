@@ -16,8 +16,13 @@ app.get('/', (request, response) => {
   response.send(app.locals.title)
 })
 
-app.get('/api/v1/foods/:id', (request, response) => {
+app.get('/api/v1/foods', (request, response) => {
   database.raw("SELECT * FROM foods")
+  .then((data) => {
+    if (data.rowCount == 0) { return response.sendStatus(404) }
+
+    response.json(data.rows[0])
+  })
 })
 
 app.get('/api/v1/foods/:id', (request, response) => {
