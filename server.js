@@ -36,6 +36,13 @@ app.post('/api/v1/foods', (request, response) => {
   if (!name || !calories) {
     return response.status(422).send({ error: "Missing required fields"})
   }
+
+  database.raw(
+    'INSERT INTO foods (name, calories) VALUES (?, ?)',
+    [name, calories])
+    .then( (data) => {
+      response.json(data.rows)
+    })
 })
 
 if (!module.parent) {

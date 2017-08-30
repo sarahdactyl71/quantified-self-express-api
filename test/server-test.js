@@ -117,7 +117,7 @@ describe('Server', () => {
     })
   })
 
-  describe('POST' '/api/v1/foods', () => {
+  describe('POST /api/v1/foods', () => {
     afterEach( (done) => {
       database.raw('TRUNCATE foods RESTART IDENTITY')
       .then( () => { done () })
@@ -143,19 +143,19 @@ describe('Server', () => {
       })
     })
 
-    it('should send 422 when food name is absent', (done) => {
-      const food = {
-        name: "",
-        calories: "800"
-      }
-
-      this.request.post('/api/v1/foods', {form: food}, (error, response) => {
-        if (error) { done(error) }
-
-        const parsedFoods = JSON.parse(response.body)
-        
-      })
-    })
+    // it('should send 422 when food name is absent', (done) => {
+    //   const food = {
+    //     name: "",
+    //     calories: "800"
+    //   }
+    //
+    //   this.request.post('/api/v1/foods', {form: food}, (error, response) => {
+    //     if (error) { done(error) }
+    //
+    //     const parsedFoods = JSON.parse(response.body)
+    //
+    //   })
+    // })
 
   })
 })
