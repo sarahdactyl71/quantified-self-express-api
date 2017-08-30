@@ -5,6 +5,7 @@ const request = require('request')
 const environment = process.env.NODE_ENV || 'test'
 const configuration = require('../knexfile')[environment]
 const database = require('knex')(configuration)
+const pry = require('pryjs')
 
 describe('Server', () => {
   before( (done) => {
@@ -47,10 +48,11 @@ describe('Server', () => {
 
   describe("GET /api/v1/foods", () => {
     beforeEach( (done) => {
-      database.raw(
-        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000])
-        .then( () => {database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Everything Burrito', 300])})
-        .then( () => { done () })
+      Promise.all([
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000]),
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Everything Burrito', 300])
+        .then( () =>  done () )
+      ])
     })
 
     afterEach( (done) => {
@@ -66,6 +68,7 @@ describe('Server', () => {
         const firstFood = parsedFoods[0]
         const secondFood = parsedFoods[1]
 
+        console.log(parsedFoods)
         assert.equal(parsedFoods.length, 2)
         assert.equal(firstFood.name, 'Monster Cake')
         assert.equal(secondFood.name, 'Everything Burrito')
