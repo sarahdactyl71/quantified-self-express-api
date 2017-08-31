@@ -159,7 +159,9 @@ describe('Server', () => {
         assert.equal(firstFood.id, 1)
         assert.equal(secondFood.id, 2)
         assert.equal(firstFood.name, 'Everything Burrito')
+        assert.equal(secondFood.name, 'Monster Cake')
         assert.equal(firstFood.calories, 300)
+        assert.equal(secondFood.calories, 1000)
 
         done ()
       })
