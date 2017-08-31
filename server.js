@@ -38,15 +38,7 @@ app.get('/api/v1/meals', (request, response) => {
 })
 
 app.get('/api/v1/meals/:id/foods', (request, response) => {
-  const id = request.params.id
-  Meal.getMeal(id)
-  .then( (data) => {
-    Meal.getMealsFoods(id)
-    .then( (foods) => {
-      const meal = Meal.addFoodsToMeal(data, foods)
-      response.json(meal)
-    })
-  })
+  mealController.showMeal(request, response)
 })
 
 if (!module.parent) {
