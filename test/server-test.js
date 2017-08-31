@@ -228,7 +228,14 @@ describe('Server', () => {
     })
 
     it('should post to the meal_foods table', () => {
-      
+      let foodID = 1
+      let mealID = 2
+      this.request.post('/api/v1/meals/' + mealID + '/foods/' + foodID, (error, response) => {
+        if (error) { done (error) }
+
+        const parsedFoods = JSON.parse(response.body)
+        console.log(parsedFoods)
+      })
     })
   })
 
