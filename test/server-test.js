@@ -213,6 +213,36 @@ describe('Server', () => {
       })
     })
 
+  describe('DELETE /api/v1/meals/:id/foods/:id', () => {
+    beforeEach( (done) => {
+      database.raw('INSERT INTO meals (name) VALUES (?)', ['brunch'])
+      database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['bread', 50])
+      .then( () => {
+        database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [1, 1])
+      })
+      .then( () => { done () })
+    })
+
+    afterEach( (done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
+      database.raw('TRUNCATE meals RESTART IDENTITY CASCADE')
+      database.raw('TRUNCATE meals_foods RESTART IDENTITY')
+      .then( () => { done () })     
+    })
+
+    it('should remove the food from the meals_foods table', () => {
+      let foodID = 1
+      let mealID = 1
+      this.request.delete('/api/v1/meals/' + mealID + '/foods/' + foodID, (error, response) => {
+        if (error) { done (error) }
+      })
+      this.request.get('/api/v1/meals/' + mealID + '/foods/' + foodID, (error, response) => {
+        assert.equal(response.statusCode, 404)
+      })
+
+    })
+  })
+
   describe('GET /api/v1/meals', () => {
     beforeEach( (done) => {
       database.raw('INSERT INTO meals (name) VALUES (?)', ['brunch'])

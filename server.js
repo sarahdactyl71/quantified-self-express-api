@@ -45,6 +45,10 @@ app.put('/api/v1/foods/:id', (request, response) => {
   foodController.update(request, response)
 })
 
+app.delete('/api/v1/meals/:id/foods/:id', (request, response) => {
+  mealController.deleteFood(request, response)
+})
+
 if (!module.parent) {
   app.listen(app.get('port'), () => {
     console.log(`${app.locals.title} is running on ${app.get('port')}.`)
