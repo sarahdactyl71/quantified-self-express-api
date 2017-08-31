@@ -132,9 +132,9 @@ describe('Server', () => {
     })
 
     it('should delete an item by id', (done) => {
-      if (error) { done(error) }
 
       this.request.delete('/api/v1/foods/2', (error, response) => {
+        if (error) { done(error) }
         const parsedFoods = JSON.parse(response.body)
         const firstFood = parsedFoods[0]
 
