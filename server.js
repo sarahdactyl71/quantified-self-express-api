@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const bodyParser = require('body-parser')
 
 const environment = process.env.NODE_ENV || 'development'
@@ -16,6 +17,7 @@ app.locals.title = 'Quantified Self Express API'
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cors())
 
 app.get('/', (request, response) => {
   response.send(app.locals.title)
