@@ -145,6 +145,25 @@ describe('Server', () => {
         done ()
       })
     })
+
+    it('should not delte an ID that does not exisit', (done) => {
+
+      this.request.delete('/api/v1/foods/2', (error, response) => {
+        if (error) { done(error) }
+
+        const parsedFoods = JSON.parse(response.body)
+        const firstFood = parsedFoods[0]
+        const secondFood = parsedFoods[1]
+
+        assert.equal(parsedFoods.length, 2)
+        assert.equal(firstFood.id, 1)
+        assert.equal(secondFood.id, 2)
+        assert.equal(firstFood.name, 'Everything Burrito')
+        assert.equal(firstFood.calories, 300)
+
+        done ()
+      })
+    })
   })
 
   describe('POST /api/v1/foods', () => {
