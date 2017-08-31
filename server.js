@@ -9,7 +9,7 @@ const database = require('knex')(configuration)
 const Food = require('./lib/models/food')
 const Meal = require('./lib/models/meal')
 const foodController = require('./lib/controllers/foods')
-// const mealController = require('./lib/controllers/meals')
+const mealController = require('./lib/controllers/meals')
 
 app.set('port', process.env.PORT || 3000)
 app.locals.title = 'Quantified Self Express API'
@@ -33,48 +33,7 @@ app.get('/api/v1/foods/:id', (request, response) => {
 })
 
 app.get('/api/v1/meals', (request, response) => {
-  // Meal.getAllMeals()
-  // .then((data) => {
-  //   if (data.rowCount == 0) { return response.sendStatus(404) }
-  //   response.json(data.rows)
-  // })
-
-  // database.raw('SELECT * FROM meals')
-  // .then((data) => {
-  //   Promise.all(
-  //     data.rows.map( (meal) => { 
-  //       database.raw(
-  //         `SELECT foods.id AS id, name, calories FROM foods
-  //         INNER JOIN meals_foods ON foods.id = meals_foods.food_id
-  //         WHERE meals_foods.meal_id = ?`, [meal.id]
-  //       )
-  //       .then( (data) => { data.rows })
-  //     })
-  //   )
-  //   .then( (foods) => {
-  //     let i = 0;
-  //     return data.rows.map( (meal) => {
-  //       let mealObject = new Meal(meal)
-  //       mealObject.foods = foods[i]
-  //       i++
-  //       return mealObject
-  //     })
-  //     response.json(data.rows)
-  //   })
-  // })
-
-  Meal.getAllMeals()
-  .then( (data) => {
-    Promise.all(
-      data.map( (meal) => { 
-        return Meal.getMealsFoods(meal.id)
-      })
-    )
-    .then( (foods) => {
-      const meals = Meal.addFoodsToMeals(data, foods)
-      response.json(meals)
-    })
-  })
+  mealController.allMeals(request, response)
 })
 
 if (!module.parent) {
