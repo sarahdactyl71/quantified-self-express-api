@@ -31,19 +31,6 @@ app.get('/api/v1/foods/:id', (request, response) => {
 
 app.post('/api/v1/foods', (request, response) => {
   foodController.create(request, response)
-  // const name = request.body.name
-  // const calories = request.body.calories
-  //
-  // if (!name || !calories) {
-  //   return response.status(422).send({ error: "Missing required fields"})
-  // }
-  //
-  // database.raw(
-  //   'INSERT INTO foods (name, calories) VALUES (?, ?)',
-  //   [name, calories])
-  //   .then( (data) => {
-  //     response.json(data.rows)
-  //   })
 })
 
 app.get('/api/v1/meals', (request, response) => {
