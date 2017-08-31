@@ -139,10 +139,11 @@ describe('Server', () => {
         const firstFood = parsedFoods[0]
 
         assert.equal(parsedFoods.length, 1)
-        assert.equal(firstFood.name, 'Monster Cake')
-        assert.equal(firstFood.calories, 1000)
+        assert.equal(firstFood.id, 1)
+        assert.equal(firstFood.name, 'Everything Burrito')
+        assert.equal(firstFood.calories, 300)
+        done ()
       })
-
     })
   })
 
