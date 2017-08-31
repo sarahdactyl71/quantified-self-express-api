@@ -144,19 +144,24 @@ describe('Server', () => {
       })
     })
 
-    // it('should send 422 when food name is absent', (done) => {
-    //   const food = {
-    //     name: "",
-    //     calories: "800"
-    //   }
-    //
-    //   this.request.post('/api/v1/foods', {form: food}, (error, response) => {
-    //     if (error) { done(error) }
-    //
-    //     const parsedFoods = JSON.parse(response.body)
-    //
-    //   })
-    // })
+    it('should send 422 when food name is absent', (done) => {
+      const food = {
+        name: "",
+        calories: "800"
+      }
+
+      this.request.post('api/foods', { form: food }, (error, response) => {
+        if(error) { done(error) }
+
+        const parsedFoods = JSON.parse(response.body)
+
+        Food.getAllFoods().then((data) => {
+          assert.equal(data.rows.length, 0)
+        })
+        assert.equal(response.statusCode, 422)
+        done()
+      })
+    })
 
   })
 
