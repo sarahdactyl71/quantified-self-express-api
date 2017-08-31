@@ -117,6 +117,20 @@ describe('Server', () => {
     })
   })
 
+  describe('DELETE /api/v1/foods/:id', () => {
+    beforeEach( (done) => {
+      database.raw(
+        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['banana', 35]
+      ).then( () => { done () })
+    })
+
+    afterEach( (done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
+      .then( () => { done () })
+    })
+    
+  })
+
   describe('POST /api/v1/foods', () => {
     afterEach( (done) => {
       database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
@@ -185,8 +199,6 @@ describe('Server', () => {
 
   })
 
-
-
   describe('GET /api/v1/meals', () => {
     beforeEach( (done) => {
       database.raw('INSERT INTO meals (name) VALUES (?)', ['brunch'])
@@ -195,7 +207,7 @@ describe('Server', () => {
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['buns', 85])
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['babka', 425])
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['roll', 200])
-      .then( () => { 
+      .then( () => {
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [1, 1])
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [2, 1])
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [3, 2])
@@ -232,7 +244,7 @@ describe('Server', () => {
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['buns', 85])
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['babka', 425])
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['roll', 200])
-      .then( () => { 
+      .then( () => {
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [1, 1])
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [2, 1])
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [3, 1])
@@ -258,6 +270,6 @@ describe('Server', () => {
         assert.equal(parsedMeals[1].name, otherName)
       })
       done ()
-    }) 
+    })
   })
 })
