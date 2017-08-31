@@ -226,6 +226,10 @@ describe('Server', () => {
       database.raw('TRUNCATE meals_foods RESTART IDENTITY')
       .then( () => { done () })
     })
+
+    it('should post to the meal_foods table', () => {
+      
+    })
   })
 
   describe('DELETE /api/v1/meals/:id/foods/:id', () => {
