@@ -130,7 +130,20 @@ describe('Server', () => {
       database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
       .then( () => { done () })
     })
-    
+
+    it('should delete an item by id', (done) => {
+      if (error) { done(error) }
+
+      this.request.delete('/api/v1/foods/2', (error, response) => {
+        const parsedFoods = JSON.parse(response.body)
+        const firstFood = parsedFoods[0]
+
+        assert.equal(parsedFoods.length, 1)
+        assert.equal(firstFood.name, 'Monster Cake')
+        assert.equal(firstFood.calories, 1000)
+      })
+
+    })
   })
 
   describe('POST /api/v1/foods', () => {
