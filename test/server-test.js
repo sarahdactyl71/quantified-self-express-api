@@ -51,7 +51,8 @@ describe('Server', () => {
     beforeEach( (done) => {
       Promise.all([
         database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000]),
-        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Everything Burrito', 300])
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Everything Burrito', 300]),
+        database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
         .then( () =>  done () )
       ])
     })
@@ -70,10 +71,10 @@ describe('Server', () => {
         const secondFood = parsedFoods[1]
 
         assert.equal(parsedFoods.length, 2)
-        assert.equal(secondFood.name, 'Monster Cake')
-        assert.equal(firstFood.name, 'Everything Burrito')
-        assert.equal(firstFood.calories, 300)
-        assert.equal(secondFood.calories, 1000)
+        assert.equal(firstFood.name, 'Monster Cake')
+        assert.equal(secondFood.name, 'Everything Burrito')
+        assert.equal(secondFood.calories, 300)
+        assert.equal(firstFood.calories, 1000)
 
         done ()
       })
