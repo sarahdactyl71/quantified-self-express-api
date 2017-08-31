@@ -131,24 +131,9 @@ describe('Server', () => {
       .then( () => { done () })
     })
 
-    it('should delete an item by id', (done) => {
-
-      this.request.delete('/api/v1/foods/2', (error, response) => {
-        if (error) { done(error) }
-        const parsedFoods = JSON.parse(response.body)
-        const firstFood = parsedFoods[0]
-
-        assert.equal(parsedFoods.length, 1)
-        assert.equal(firstFood.id, 1)
-        assert.equal(firstFood.name, 'Everything Burrito')
-        assert.equal(firstFood.calories, 300)
-        done ()
-      })
-    })
-
     it('should not delte an ID that does not exisit', (done) => {
 
-      this.request.delete('/api/v1/foods/2', (error, response) => {
+      this.request.delete('/api/v1/foods/3', (error, response) => {
         if (error) { done(error) }
 
         const parsedFoods = JSON.parse(response.body)
@@ -163,6 +148,21 @@ describe('Server', () => {
         assert.equal(firstFood.calories, 300)
         assert.equal(secondFood.calories, 1000)
 
+        done ()
+      })
+    })
+
+    it('should delete an item by id', (done) => {
+
+      this.request.delete('/api/v1/foods/2', (error, response) => {
+        if (error) { done(error) }
+        const parsedFoods = JSON.parse(response.body)
+        const firstFood = parsedFoods[0]
+
+        assert.equal(parsedFoods.length, 1)
+        assert.equal(firstFood.id, 1)
+        assert.equal(firstFood.name, 'Everything Burrito')
+        assert.equal(firstFood.calories, 300)
         done ()
       })
     })
