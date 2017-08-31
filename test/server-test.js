@@ -119,9 +119,11 @@ describe('Server', () => {
 
   describe('DELETE /api/v1/foods/:id', () => {
     beforeEach( (done) => {
-      database.raw(
-        'INSERT INTO foods (name, calories) VALUES (?, ?)', ['banana', 35]
-      ).then( () => { done () })
+      Promise.all([
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000]),
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Everything Burrito', 300])
+        .then( () =>  done () )
+      ])
     })
 
     afterEach( (done) => {
