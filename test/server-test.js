@@ -134,10 +134,11 @@ describe('Server', () => {
         const parsedFoods = JSON.parse(response.body)
         const firstFood = parsedFoods[0]
 
-        console.log(parsedFoods)
+        // console.log(parsedFoods)
+
         assert.equal(parsedFoods.length, 1)
         assert.equal(firstFood.name, "Sushi")
-        asser.equal(firstFood.calories, 400)
+        assert.equal(firstFood.calories, 400)
 
         done()
       })
