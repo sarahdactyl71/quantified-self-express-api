@@ -117,45 +117,46 @@ describe('Server', () => {
     })
   })
 
+  
   describe('POST /api/v1/foods', () => {
     afterEach( (done) => {
       database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
       .then( () => { done () })
     })
-
+    
     it('should take and return data', (done) => {
       const food = {
         name: "Sushi",
         calories: 400
       }
-
+      
       this.request.post('/api/v1/foods', { form: food }, (error, response) => {
         if (error) { done(error) }
-
+        
         const parsedFoods = JSON.parse(response.body)
         const firstFood = parsedFoods[0]
-
+        
         // console.log(parsedFoods)
-
+        
         assert.equal(parsedFoods.length, 1)
         assert.equal(firstFood.name, "Sushi")
         assert.equal(firstFood.calories, 400)
-
+        
         done()
       })
     })
-
+    
     it('should send 422 when food name is absent', (done) => {
       const food = {
         name: "",
         calories: "800"
       }
-
+      
       this.request.post('/api/v1/foods', { form: food }, (error, response) => {
         if(error) { done(error) }
-
+        
         const parsedFoods = JSON.parse(response.body)
-
+        
         Food.getAllFoods().then((data) => {
           assert.equal(data.rows.length, 0)
         })
@@ -163,18 +164,18 @@ describe('Server', () => {
         done()
       })
     })
-
+    
     it('should send 422 when food calories are absent', (done) => {
       const food = {
         name: "Macaroni and Cheese",
         calories: ""
       }
-
+      
       this.request.post('/api/v1/foods', { form: food }, (error, response) => {
         if(error) { done(error) }
-
+        
         const parsedFoods = JSON.parse(response.body)
-
+        
         Food.getAllFoods().then((data) => {
           assert.equal(data.rows.length, 0)
         })
@@ -182,10 +183,35 @@ describe('Server', () => {
         done()
       })
     })
-
   })
+  
+  describe('PUT /api/v1/foods/:id', () => {
+    beforeEach( (done) => {
+      database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['roll', 200])
+      .then( () => { done () })
+    })
 
+    afterEach( (done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
+      .then( () => { done () })
+    })
 
+    it('should change the name and calories of the food', (done) => {
+      let id = 1
+      let name = 'jelly'
+      let calories = 400
+      const foodObject = {food: {id, name, calories}}
+
+      this.request.put('/api/v1/foods/' + id, { form: foodObject }, (error, response) => {
+        if (error) { done (error) }
+        const updatedFood = JSON.parse(response.body)
+        assert.equal(updatedFood.id, id)
+        assert.equal(updatedFood.name, name)
+        assert.equal(updatedFood.calories, calories)
+      })
+        done ()
+      })
+    })
 
   describe('GET /api/v1/meals', () => {
     beforeEach( (done) => {
@@ -248,7 +274,7 @@ describe('Server', () => {
       .then( () => { done () })
     })
 
-    it('should rereturn the food id, name, and calories from the resources found', (done) => {
+    it('should return the food id, name, and calories from the resources found', (done) => {
       let name = 'bread'
       let id = 1
       this.request.get('/api/v1/meals/' + id + '/foods', (error, response) => {
@@ -260,4 +286,5 @@ describe('Server', () => {
       done ()
     }) 
   })
+
 })
