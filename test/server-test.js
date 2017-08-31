@@ -1,6 +1,7 @@
 const assert = require('chai').assert
 const app = require('../server')
 const request = require('request')
+const Food = require('../lib/models/food')
 
 const environment = process.env.NODE_ENV || 'test'
 const configuration = require('../knexfile')[environment]
@@ -68,7 +69,6 @@ describe('Server', () => {
         const firstFood = parsedFoods[0]
         const secondFood = parsedFoods[1]
 
-        console.log(parsedFoods)
         assert.equal(parsedFoods.length, 2)
         assert.equal(secondFood.name, 'Monster Cake')
         assert.equal(firstFood.name, 'Everything Burrito')
@@ -116,6 +116,76 @@ describe('Server', () => {
       })
     })
   })
+
+  describe('POST /api/v1/foods', () => {
+    afterEach( (done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
+      .then( () => { done () })
+    })
+
+    it('should take and return data', (done) => {
+      const food = {
+        name: "Sushi",
+        calories: 400
+      }
+
+      this.request.post('/api/v1/foods', { form: food }, (error, response) => {
+        if (error) { done(error) }
+
+        const parsedFoods = JSON.parse(response.body)
+        const firstFood = parsedFoods[0]
+
+        // console.log(parsedFoods)
+
+        assert.equal(parsedFoods.length, 1)
+        assert.equal(firstFood.name, "Sushi")
+        assert.equal(firstFood.calories, 400)
+
+        done()
+      })
+    })
+
+    it('should send 422 when food name is absent', (done) => {
+      const food = {
+        name: "",
+        calories: "800"
+      }
+
+      this.request.post('/api/v1/foods', { form: food }, (error, response) => {
+        if(error) { done(error) }
+
+        const parsedFoods = JSON.parse(response.body)
+
+        Food.getAllFoods().then((data) => {
+          assert.equal(data.rows.length, 0)
+        })
+        assert.equal(response.statusCode, 422)
+        done()
+      })
+    })
+
+    it('should send 422 when food calories are absent', (done) => {
+      const food = {
+        name: "Macaroni and Cheese",
+        calories: ""
+      }
+
+      this.request.post('/api/v1/foods', { form: food }, (error, response) => {
+        if(error) { done(error) }
+
+        const parsedFoods = JSON.parse(response.body)
+
+        Food.getAllFoods().then((data) => {
+          assert.equal(data.rows.length, 0)
+        })
+        assert.equal(response.statusCode, 422)
+        done()
+      })
+    })
+
+  })
+
+
 
   describe('GET /api/v1/meals', () => {
     beforeEach( (done) => {
