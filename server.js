@@ -33,12 +33,7 @@ app.get('/api/v1/foods/:id', (request, response) => {
 })
 
 app.get('/api/v1/meals', (request, response) => {
-  Meal.getAllMeals()
-  .then((data) => {
-    if (data.rowCount == 0) { return response.sendStatus(404) }
-
-    response.json(data.rows)
-  })
+  mealController.allMeals(request, response)
 })
 
 if (!module.parent) {
