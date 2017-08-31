@@ -36,6 +36,18 @@ app.get('/api/v1/meals', (request, response) => {
   mealController.allMeals(request, response)
 })
 
+app.get('/api/v1/meals/:id/foods', (request, response) => {
+  const id = request.params.id
+  Meal.getMeal(id)
+  .then( (data) => {
+    Meal.getMealsFoods(id)
+    .then( (foods) => {
+      const meal = Meal.addFoodsToMeal(data, foods)
+      response.json(meal)
+    })
+  })
+})
+
 if (!module.parent) {
   app.listen(app.get('port'), () => {
     console.log(`${app.locals.title} is running on ${app.get('port')}.`)
