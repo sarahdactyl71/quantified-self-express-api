@@ -1,6 +1,7 @@
 const assert = require('chai').assert
 const app = require('../server')
 const request = require('request')
+const Food = require('../lib/models/food')
 
 const environment = process.env.NODE_ENV || 'test'
 const configuration = require('../knexfile')[environment]
@@ -150,7 +151,7 @@ describe('Server', () => {
         calories: "800"
       }
 
-      this.request.post('api/foods', { form: food }, (error, response) => {
+      this.request.post('/api/v1/foods', { form: food }, (error, response) => {
         if(error) { done(error) }
 
         const parsedFoods = JSON.parse(response.body)
