@@ -33,6 +33,10 @@ app.post('/api/v1/foods', (request, response) => {
   foodController.create(request, response)
 })
 
+app.delete('/api/v1/foods/:id', (request, response) => {
+  foodController.deleteFood(request, response)
+})
+
 app.get('/api/v1/meals', (request, response) => {
   mealController.allMeals(request, response)
 })

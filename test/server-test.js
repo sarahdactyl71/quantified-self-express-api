@@ -117,6 +117,57 @@ describe('Server', () => {
     })
   })
 
+  describe('DELETE /api/v1/foods/:id', () => {
+    beforeEach( (done) => {
+      Promise.all([
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Monster Cake', 1000]),
+        database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['Everything Burrito', 300])
+        .then( () =>  done () )
+      ])
+    })
+
+    afterEach( (done) => {
+      database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
+      .then( () => { done () })
+    })
+
+    it('should not delte an ID that does not exisit', (done) => {
+
+      this.request.delete('/api/v1/foods/3', (error, response) => {
+        if (error) { done(error) }
+
+        const parsedFoods = JSON.parse(response.body)
+        const firstFood = parsedFoods[0]
+        const secondFood = parsedFoods[1]
+
+        assert.equal(parsedFoods.length, 2)
+        assert.equal(firstFood.id, 1)
+        assert.equal(secondFood.id, 2)
+        assert.equal(firstFood.name, 'Everything Burrito')
+        assert.equal(secondFood.name, 'Monster Cake')
+        assert.equal(firstFood.calories, 300)
+        assert.equal(secondFood.calories, 1000)
+
+        done ()
+      })
+    })
+
+    it('should delete an item by id', (done) => {
+
+      this.request.delete('/api/v1/foods/2', (error, response) => {
+        if (error) { done(error) }
+        const parsedFoods = JSON.parse(response.body)
+        const firstFood = parsedFoods[0]
+
+        assert.equal(parsedFoods.length, 1)
+        assert.equal(firstFood.id, 1)
+        assert.equal(firstFood.name, 'Everything Burrito')
+        assert.equal(firstFood.calories, 300)
+        done ()
+      })
+    })
+  })
+
   describe('POST /api/v1/foods', () => {
     afterEach( (done) => {
       database.raw('TRUNCATE foods RESTART IDENTITY CASCADE')
@@ -134,8 +185,6 @@ describe('Server', () => {
 
         const parsedFoods = JSON.parse(response.body)
         const firstFood = parsedFoods[0]
-
-        // console.log(parsedFoods)
 
         assert.equal(parsedFoods.length, 1)
         assert.equal(firstFood.name, "Sushi")
@@ -185,8 +234,6 @@ describe('Server', () => {
 
   })
 
-
-
   describe('GET /api/v1/meals', () => {
     beforeEach( (done) => {
       database.raw('INSERT INTO meals (name) VALUES (?)', ['brunch'])
@@ -195,7 +242,7 @@ describe('Server', () => {
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['buns', 85])
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['babka', 425])
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['roll', 200])
-      .then( () => { 
+      .then( () => {
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [1, 1])
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [2, 1])
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [3, 2])
@@ -232,7 +279,7 @@ describe('Server', () => {
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['buns', 85])
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['babka', 425])
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['roll', 200])
-      .then( () => { 
+      .then( () => {
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [1, 1])
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [2, 1])
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [3, 1])
@@ -258,6 +305,6 @@ describe('Server', () => {
         assert.equal(parsedMeals[1].name, otherName)
       })
       done ()
-    }) 
+    })
   })
 })
