@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const request = require('request')
 const bodyParser = require('body-parser')
 
 const environment = process.env.NODE_ENV || 'development'
