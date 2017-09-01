@@ -214,6 +214,7 @@ describe('Server', () => {
     beforeEach( (done) => {
       database.raw('INSERT INTO meals (name) VALUES (?)', ['brunch'])
       database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['bread', 50])
+      database.raw('INSERT INTO foods (name, calories) VALUES (?, ?)', ['butter', 100])
       .then( () => {
         database.raw('INSERT INTO meals_foods (food_id, meal_id) VALUES (?, ?)', [1, 1])
       })
@@ -228,12 +229,13 @@ describe('Server', () => {
     })
 
     it('should post to the meal_foods table', () => {
-      let foodID = 1
-      let mealID = 2
+      let foodID = 2
+      let mealID = 1
       this.request.post('/api/v1/meals/' + mealID + '/foods/' + foodID, (error, response) => {
         if (error) { done (error) }
 
         const parsedFoods = JSON.parse(response.body)
+        assert.equal(parsedFoods.length, 2)
         console.log(parsedFoods)
       })
     })
