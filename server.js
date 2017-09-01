@@ -52,7 +52,7 @@ app.put('/api/v1/foods/:id', (request, response) => {
 })
 
 app.post('/api/v1/meals/:id/foods/:id', (request, response) => {
-  mealController.deleteFood(request, response)
+  mealController.createFood(request, response)
 })
 
 app.delete('/api/v1/meals/:id/foods/:id', (request, response) => {
